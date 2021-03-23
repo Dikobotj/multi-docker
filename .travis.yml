@@ -5,20 +5,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t dikobotj/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t dikobotj/react-test -f ./clients/Dockerfile.dev ./clients
 
 script:
   - docker run -e CI=true dikobotj/react-test npm test
 
 after_success:
-  - docker build -t dikobotj/multi-client ./client
+  - docker build -t dikobotj/multi-clients ./clients
   - docker build -t dikobotj/multi-nginx ./nginx
   - docker build -t dikobotj/multi-server ./server
   - docker build -t dikobotj/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push dikobotj/multi-client
+  - docker push dikobotj/multi-clients
   - docker push dikobotj/multi-nginx
   - docker push dikobotj/multi-server
   - docker push dikobotj/multi-worker
